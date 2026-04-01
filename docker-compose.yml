@@ -1,0 +1,10 @@
+services:
+  etl:
+    build: .
+    container_name: proyecto_modulo1_etl
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+    working_dir: /app
+    stdin_open: true
+    tty: true
