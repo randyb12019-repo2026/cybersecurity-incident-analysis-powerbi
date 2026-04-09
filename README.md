@@ -112,15 +112,9 @@ pip install -r requirements.txt
 2. Si los datos necesitan refrescarse: **Inicio → Actualizar** (o `Ctrl+R`)
 3. Navega entre las páginas del reporte usando los botones de navegación
 4. Usa el botón **Resetear Filtros** en cada página para limpiar segmentaciones
-5. Para modificar el modelo semántico, conecta **Tabular Editor 3** desde la pestaña *Herramientas externas*
-
-### Conexión con Tabular Editor 3
-
-1. En Power BI Desktop: **Archivo → Opciones → Conjunto de datos** → Habilitar conexiones XMLA
-2. Reinicia Power BI y abre el PBIX
-3. En TE3: **Modelo desde base de datos** → Servidor: `localhost` → Base de datos: seleccionar el modelo
-
 ---
+
+
 
 ## ETL Pipeline
 
@@ -158,7 +152,6 @@ with open('notebooks/proyecto_moduloI_completado.ipynb', 'w') as f:
 | Pandas | ≥1.5.0 | Manipulación de datos |
 | NumPy | ≥1.24.0 | Cómputo numérico |
 | Power BI | Desktop | Visualización y dashboard |
-| Tabular Editor 3 | 3.x | Modelado semántico y medidas DAX |
 | Docker | 24+ | Entorno reproducible |
 
 ---
