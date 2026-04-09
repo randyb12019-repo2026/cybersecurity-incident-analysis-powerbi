@@ -1,5 +1,7 @@
 # Análisis de Incidentes de Ciberseguridad
 
+![Estado](https://img.shields.io/badge/Estado-Completado-2ea44f)
+
 ## Impacto Financiero y en el Mercado de Valores
 
 Dashboard interactivo en **Power BI** que analiza **850 incidentes de ciberseguridad** reales, cuantificando pérdidas financieras, impacto operacional y comportamiento del mercado bursátil post-incidente.
