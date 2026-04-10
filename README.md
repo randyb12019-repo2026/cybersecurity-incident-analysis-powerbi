@@ -21,7 +21,7 @@ Los datos provienen del dataset público de Kaggle: **Cybersecurity Incidents wi
 
 ## Autor
 
-**Randy Bonucci Martín** — Ingeniero Informático
+**Randy Bonucci** — Ingeniero Informático
 
 [![GitHub](https://img.shields.io/badge/GitHub-Perfil-181717?style=flat&logo=github)](https://github.com/randybonucci)
 
