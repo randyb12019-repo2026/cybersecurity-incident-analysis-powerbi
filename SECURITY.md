@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Actualmente el proyecto está en fase de desarrollo activo. Solo la versión más reciente recibe actualizaciones de seguridad.
+El desarrollo del proyecto ha sido completado. Solo la versión más reciente recibe actualizaciones de seguridad.
 
 | Version | Supported |
 | ------- | --------- |
