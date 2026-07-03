@@ -2,20 +2,21 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Actualmente el proyecto está en fase de desarrollo activo. Solo la versión más reciente recibe actualizaciones de seguridad.
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 5.1.x   | :white_check_mark: |
-| 5.0.x   | :x:                |
-| 4.0.x   | :white_check_mark: |
-| < 4.0   | :x:                |
+| Version | Supported |
+| ------- | --------- |
+| main    | ✅ |
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+Si encuentras una vulnerabilidad de seguridad, por favor repórtala abriendo un **Issue** en GitHub:
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+https://github.com/randyb12019-repo2026/cybersecurity-incident-analysis-powerbi/issues
+
+No la reportes en discusiones públicas hasta que sea revisada. Te recomendamos incluir:
+- Descripción del problema
+- Pasos para reproducirlo
+- Posible impacto
+
+Espera recibir una respuesta inicial dentro de los próximos 7 días hábiles.
