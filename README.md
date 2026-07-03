@@ -29,6 +29,16 @@ Los datos provienen del dataset público de Kaggle: **Cybersecurity Incidents wi
 
 ---
 
+## Seguridad
+
+- **Dependabot** — Revisión semanal automatizada de dependencias (`pip`, `docker`)
+- **CodeQL** — Análisis de código automatizado en cada push y PR a `main`
+- Para reportar una vulnerabilidad, abre un [Issue en GitHub](https://github.com/randyb12019-repo2026/cybersecurity-incident-analysis-powerbi/issues)
+
+Consulta [`SECURITY.md`](SECURITY.md) para más detalles.
+
+---
+
 ## Licencia
 
 Distribuido bajo **MIT License**. Consulta el archivo `LICENSE` para más información.
