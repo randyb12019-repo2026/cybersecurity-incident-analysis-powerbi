@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Análisis de Incidentes de Ciberseguridad — Presentación</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0e17;
+  --surface:#0f1629;
+  --primary:#00f0ff;
+  --secondary:#00ff88;
+  --accent:#ff0040;
+  --text:#e2e8f0;
+  --text2:#8892b0;
+  --font:'Inter',-apple-system,sans-serif;
+}
+html,body{height:100%}
+body{
+  font-family:var(--font);
+  background:var(--bg);
+  color:var(--text);
+  display:flex;flex-direction:column;
+  overflow:hidden
+}
+.toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.6rem 1.5rem;
+  background:rgba(10,14,23,0.95);
+  border-bottom:1px solid rgba(0,240,255,0.08);
+  backdrop-filter:blur(12px);
+  z-index:10;flex-shrink:0
+}
+.toolbar .title{
+  font-size:.85rem;font-weight:600;color:var(--primary);
+  letter-spacing:.5px
+}
+.toolbar .title span{color:var(--secondary)}
+.nav-group{display:flex;align-items:center;gap:.5rem}
+.nav-btn{
+  background:rgba(0,240,255,0.06);
+  border:1px solid rgba(0,240,255,0.12);
+  color:var(--text);padding:.35rem .9rem;border-radius:6px;
+  cursor:pointer;font-size:.8rem;font-family:var(--font);
+  transition:.2s;display:flex;align-items:center;gap:4px
+}
+.nav-btn:hover{background:rgba(0,240,255,0.12);border-color:var(--primary)}
+.nav-btn:disabled{opacity:.3;cursor:not-allowed}
+.nav-btn.primary{
+  background:linear-gradient(135deg,var(--primary),var(--secondary));
+  color:var(--bg);font-weight:600;border:none
+}
+.nav-btn.primary:hover{box-shadow:0 0 20px rgba(0,240,255,0.3)}
+.page-indicator{
+  font-size:.8rem;color:var(--text2);font-weight:500;min-width:80px;text-align:center
+}
+.viewer-container{
+  flex:1;display:flex;align-items:center;justify-content:center;
+  padding:1rem;overflow:hidden;position:relative
+}
+canvas#pdf-canvas{
+  max-width:100%;max-height:100%;
+  box-shadow:0 0 40px rgba(0,0,0,0.5);
+  border-radius:4px;
+  object-fit:contain
+}
+.loading{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1rem;color:var(--text2);font-size:.9rem
+}
+.spinner{
+  width:32px;height:32px;
+  border:3px solid rgba(0,240,255,0.1);
+  border-top-color:var(--primary);
+  border-radius:50%;animation:spin .8s linear infinite
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.error{
+  position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+  color:var(--accent);font-size:1rem
+}
+.zoom-group{display:flex;align-items:center;gap:4px}
+.zoom-group .zoom-label{font-size:.7rem;color:var(--text2);min-width:36px;text-align:center}
+.thumbstrip{
+  display:flex;gap:.4rem;padding:.4rem 1rem;
+  background:rgba(10,14,23,0.9);
+  border-top:1px solid rgba(0,240,255,0.06);
+  overflow-x:auto;flex-shrink:0
+}
+.thumbstrip::-webkit-scrollbar{height:3px}
+.thumbstrip::-webkit-scrollbar-thumb{background:rgba(0,240,255,0.15);border-radius:4px}
+.thumb-item{
+  flex-shrink:0;width:56px;height:40px;
+  border-radius:4px;overflow:hidden;cursor:pointer;
+  border:2px solid transparent;opacity:.5;transition:.2s;
+  background:rgba(255,255,255,0.03);position:relative
+}
+.thumb-item.active{border-color:var(--primary);opacity:1}
+.thumb-item:hover{opacity:.8}
+.thumb-item canvas{width:100%;height:100%;object-fit:cover}
+.thumb-item .page-num{
+  position:absolute;bottom:2px;right:3px;
+  font-size:.55rem;color:#fff;background:rgba(0,0,0,0.6);
+  padding:0 3px;border-radius:2px
+}
+@media(max-width:600px){
+  .toolbar{flex-wrap:wrap;gap:.4rem;padding:.4rem .8rem}
+  .toolbar .title{font-size:.75rem;width:100%}
+  .thumb-item{width:40px;height:28px}
+  .page-indicator{min-width:60px;font-size:.75rem}
+}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <div class="title">&#x1f6e1;&#xfe0f; Ciberseguridad <span>|</span> Impacto Financiero & Mercado</div>
+  <div class="nav-group">
+    <button class="nav-btn" id="prevBtn" disabled>&#x25C0; Anterior</button>
+    <span class="page-indicator" id="pageIndicator">- / -</span>
+    <button class="nav-btn" id="nextBtn" disabled>Siguiente &#x25B6;</button>
+  </div>
+  <div class="nav-group zoom-group">
+    <button class="nav-btn" id="zoomOutBtn">&#x2212;</button>
+    <span class="zoom-label" id="zoomLabel">100%</span>
+    <button class="nav-btn" id="zoomInBtn">+</button>
+    <button class="nav-btn primary" id="fullscreenBtn">&#x26F6; Pantalla completa</button>
+  </div>
+</div>
+<div class="viewer-container">
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <span>Cargando presentaci&oacute;n...</span>
+  </div>
+  <canvas id="pdf-canvas"></canvas>
+</div>
+<div class="thumbstrip" id="thumbstrip"></div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+const PDF_URL = 'reports/powerbi.pdf';
+const canvas = document.getElementById('pdf-canvas');
+const ctx = canvas.getContext('2d');
+const loading = document.getElementById('loading');
+const pageIndicator = document.getElementById('pageIndicator');
+const prevBtn = document.getElementById('prevBtn');
+const nextBtn = document.getElementById('nextBtn');
+const zoomOutBtn = document.getElementById('zoomOutBtn');
+const zoomInBtn = document.getElementById('zoomInBtn');
+const zoomLabel = document.getElementById('zoomLabel');
+const fullscreenBtn = document.getElementById('fullscreenBtn');
+const thumbstrip = document.getElementById('thumbstrip');
+
+let pdfDoc = null;
+let currentPage = 1;
+let scale = 1.2;
+let thumbnails = [];
+
+async function loadPDF() {
+  try {
+    pdfDoc = await pdfjsLib.getDocument(PDF_URL).promise;
+    loading.style.display = 'none';
+    renderPage(currentPage);
+    renderThumbnails();
+    updateControls();
+  } catch (e) {
+    loading.innerHTML = '<div class="error">&#x26A0; Error al cargar el PDF. Aseg&uacute;rate de que <code>reports/powerbi.pdf</code> existe.</div>';
+    console.error(e);
+  }
+}
+
+async function renderPage(num) {
+  const page = await pdfDoc.getPage(num);
+  const vp = page.getViewport({ scale });
+  canvas.width = vp.width;
+  canvas.height = vp.height;
+  await page.render({ canvasContext: ctx, viewport: vp }).promise;
+  pageIndicator.textContent = `${num} / ${pdfDoc.numPages}`;
+  document.querySelectorAll('.thumb-item').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.page) === num);
+  });
+  if (thumbstrip.querySelector('.thumb-item.active')) {
+    thumbstrip.querySelector('.thumb-item.active').scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  }
+  updateControls();
+}
+
+function updateControls() {
+  prevBtn.disabled = currentPage <= 1;
+  nextBtn.disabled = currentPage >= pdfDoc.numPages;
+}
+
+async function renderThumbnails() {
+  thumbstrip.innerHTML = '';
+  for (let i = 1; i <= pdfDoc.numPages; i++) {
+    const page = await pdfDoc.getPage(i);
+    const vp = page.getViewport({ scale: 0.3 });
+    const tc = document.createElement('canvas');
+    tc.width = vp.width;
+    tc.height = vp.height;
+    const tctx = tc.getContext('2d');
+    await page.render({ canvasContext: tctx, viewport: vp }).promise;
+
+    const div = document.createElement('div');
+    div.className = 'thumb-item' + (i === 1 ? ' active' : '');
+    div.dataset.page = i;
+    div.appendChild(tc);
+
+    const numLabel = document.createElement('span');
+    numLabel.className = 'page-num';
+    numLabel.textContent = i;
+    div.appendChild(numLabel);
+
+    div.addEventListener('click', () => {
+      currentPage = i;
+      renderPage(currentPage);
+    });
+    thumbstrip.appendChild(div);
+  }
+}
+
+prevBtn.addEventListener('click', () => {
+  if (currentPage > 1) { currentPage--; renderPage(currentPage); }
+});
+nextBtn.addEventListener('click', () => {
+  if (currentPage < pdfDoc.numPages) { currentPage++; renderPage(currentPage); }
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' && !prevBtn.disabled) prevBtn.click();
+  if (e.key === 'ArrowRight' && !nextBtn.disabled) nextBtn.click();
+});
+
+zoomOutBtn.addEventListener('click', () => {
+  scale = Math.max(0.3, scale - 0.2);
+  zoomLabel.textContent = Math.round(scale * 100) + '%';
+  renderPage(currentPage);
+});
+zoomInBtn.addEventListener('click', () => {
+  scale = Math.min(3, scale + 0.2);
+  zoomLabel.textContent = Math.round(scale * 100) + '%';
+  renderPage(currentPage);
+});
+
+fullscreenBtn.addEventListener('click', () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen().catch(() => {});
+  } else {
+    document.exitFullscreen();
+  }
+});
+
+loadPDF();
+</script>
+</body>
+</html>
